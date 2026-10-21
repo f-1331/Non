@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tandir Non — O'tin Taftida Pishgan Haqiqiy Nonlar | nonuz_bot</title>
+    
+    <!-- Meta SEO -->
+    <meta name="description" content="Tandirdan endigina uzilgan issiq, qarsildoq nonlar! Go'shtli non, Qo'qon patir, Ramashka va Yog'li non. Ertalab 05:00 dan kechqurun 20:00 gacha yetkazib beramiz.">
+    <meta name="theme-color" content="#1a120c">
+
+    <!-- Fonts: Marcellus (Artisan heritage) + Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clay: {
+                            950: '#0d0805',
+                            900: '#150d08',
+                            850: '#1c120c',
+                            800: '#261810',
+                            700: '#382216',
+                            600: '#523220',
+                        },
+                        flame: {
+                            500: '#ff5c00',
+                            600: '#e64e00',
+                            700: '#c23e00',
+                        },
+                        crust: {
+                            100: '#fff4e5',
+                            200: '#ffe5c2',
+                            300: '#fcd092',
+                            400: '#f7b458',
+                            500: '#e59325',
+                            600: '#cb7812',
+                            700: '#a3590b',
+                        }
+                    },
+                    fontFamily: {
+                        heritage: ['"Marcellus"', 'serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Telegram WebApp Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        /* Tandir Glowing Ambience */
+        .tandir-glow {
+            box-shadow: 0 0 60px -15px rgba(255, 92, 0, 0.28);
+        }
+        .tandir-border {
+            border: 1px solid rgba(229, 147, 37, 0.2);
+        }
+        .tandir-card-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tandir-card-hover:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 25px 45px -12px rgba(255, 92, 0, 0.25);
+            border-color: rgba(247, 180, 88, 0.5);
+        }
+        
+        /* Floating Steam Animation */
+        @keyframes steamRise {
+            0% { transform: translateY(0) scaleX(1); opacity: 0; }
+            40% { opacity: 0.6; }
+            100% { transform: translateY(-30px) scaleX(1.4); opacity: 0; }
+        }
+        .steam-bubble {
+            animation: steamRise 3s infinite ease-out;
+        }
+
+        /* Ember particles floating */
+        @keyframes emberFly {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-120px) translateX(25px); opacity: 0; }
+        }
+        .ember {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff7700;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: emberFly 4s infinite linear;
+        }
+
+        /* Chekich (Bread stamp) geometric background pattern */
+        .chekich-bg {
+            background-color: #120b07;
+            background-image: radial-gradient(rgba(247, 180, 88, 0.08) 1.5px, transparent 1.5px), radial-gradient(rgba(255, 92, 0, 0.05) 1.5px, #120b07 1.5px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+        }
+
+        /* Noise texture for artisanal feel */
+        .wood-texture {
+            background: linear-gradient(135deg, rgba(28,18,12,0.95) 0%, rgba(18,11,7,0.98) 100%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: #120b07; }
+        ::-webkit-scrollbar-thumb { background: #523220; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e59325; }
+    </style>
+</head>
+<body class="chekich-bg text-stone-200 font-sans antialiased selection:bg-crust-500 selection:text-clay-950 pb-20 md:pb-0">
+
+    <!-- Ambient Sound Audio Button & Top Live Tandir Bar -->
+    <div class="border-b border-crust-600/20 bg-clay-950/80 backdrop-blur-md sticky top-0 z-50 text-xs">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Left: Tandir Status -->
+            <div class="flex items-center gap-3">
+                <div id="tandir-live-pill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-flame-500/10 border border-flame-500/30 text-crust-300 font-medium">
+                    <span class="w-2.5 h-2.5 rounded-full bg-flame-500 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-flame-500 -ml-4.5"></span>
+                    <span id="tandir-live-text" class="font-bold tracking-wide uppercase text-[11px]">Tandir qizigan</span>
+                </div>
+                
+                <span class="text-stone-500 hidden sm:inline">•</span>
+                <span class="hidden sm:inline text-stone-400">
+                    <i class="far fa-clock text-crust-400 mr-1"></i> Tonggi <b class="text-crust-200">05:00</b> — Kechqurun <b class="text-crust-200">20:00</b>
+                </span>
+            </div>
+
+            <!-- Right: Interactive Sound Toggle & Hotline -->
+            <div class="flex items-center gap-4">
+                <!-- Sound Ambient Toggle -->
+                <button id="sound-toggle-btn" onclick="toggleFireAmbient()" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-clay-850 hover:bg-clay-800 border border-crust-600/30 text-crust-300 transition text-[11px] cursor-pointer" title="Tandir shukuhi tovushi">
+                    <i id="sound-icon" class="fas fa-volume-xmark text-stone-400"></i>
+                    <span id="sound-label" class="hidden md:inline">Tandir ovozi</span>
+                </button>
+
+                <div class="flex items-center gap-2 text-stone-300">
+                    <span class="text-flame-500 text-xs"><i class="fas fa-bolt"></i></span>
+                    <span class="hidden lg:inline text-stone-400">Buyurtma uchun:</span>
+                    <a href="tel:+998980009454" class="text-crust-300 font-bold hover:text-white transition tracking-wide">98 000 94 54</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="border-b border-crust-600/15 bg-clay-900/90 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand: Authentic Uzbek Nonvoyxona Logo -->
+                <a href="#" class="flex items-center gap-3.5 group">
+                    <div class="relative">
+                        <div class="w-13 h-13 rounded-2xl bg-gradient-to-br from-crust-600 via-flame-600 to-clay-950 p-[1.5px] shadow-lg shadow-flame-500/20 group-hover:scale-105 transition-transform duration-300">
+                            <div class="w-full h-full bg-clay-950 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                                <i class="fas fa-fire text-flame-500 text-2xl group-hover:text-crust-300 transition"></i>
+                                <div class="absolute -bottom-2 w-8 h-4 bg-flame-500/30 blur-md rounded-full"></div>
+                            </div>
+                        </div>
+                        <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-flame-400 opacity-60"></span>
+                            <span class="relative inline-flex rounded-full h-4 w-4 bg-flame-500 border border-clay-950 text-[8px] text-white font-bold items-center justify-center">✓</span>
+                        </span>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-heritage text-2xl sm:text-3xl font-extrabold text-white tracking-wider">TANDIR</span>
+                            <span class="font-heritage text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-crust-400 via-crust-300 to-flame-400">NON</span>
+                        </div>
+                        <p class="text-[11px] text-crust-300/70 tracking-widest uppercase font-medium">Besh asrlik o'tin tafti</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-stone-300">
+                    <a href="#menu" class="hover:text-crust-300 transition flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-crust-500"></span>
+                        <span>Nonlarimiz</span>
+                    </a>
+                    <a href="#dasturxon" class="hover:text-crust-300 transition flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-flame-500"></span>
+                        <span>Mehmon Kalkulyatori</span>
+                    </a>
+                    <a href="#sirlar" class="hover:text-crust-300 transition">Tandir Sirlari</a>
+                    <a href="#contacts" class="hover:text-crust-300 transition">Dastavka & Bog'lanish</a>
+                </nav>
+
+                <!-- Actions: Cart & Call -->
+                <div class="flex items-center gap-3">
+                    <a href="tel:+998909019292" class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-clay-800/80 hover:bg-clay-700/90 border border-crust-600/30 text-crust-200 text-xs font-bold transition">
+                        <i class="fas fa-phone-volume text-flame-500"></i>
+                        <span>90 901 92 92</span>
+                    </a>
+
+                    <!-- Shopping Cart Drawer Trigger Button -->
+                    <button onclick="toggleCartModal()" class="relative p-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:from-crust-500 hover:to-flame-500 text-white shadow-lg shadow-flame-600/30 active:scale-95 transition flex items-center gap-2 cursor-pointer" aria-label="Savat">
+                        <i class="fas fa-shopping-basket text-base"></i>
+                        <span class="hidden md:inline font-bold text-xs uppercase tracking-wider">Savat</span>
+                        <span id="cart-badge-count" class="absolute -top-1.5 -right-1.5 bg-flame-500 text-clay-950 font-black text-xs rounded-full h-5.5 w-5.5 flex items-center justify-center border-2 border-clay-950 scale-0 transition-transform">0</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section: Warm Artisanal Atmosphere -->
+        <section class="relative overflow-hidden pt-12 pb-16 md:pt-20 md:pb-28">
+            <!-- Background glow & glowing embers -->
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-flame-600/15 rounded-full blur-[120px] pointer-events-none"></div>
+            <div class="absolute top-10 right-10 w-96 h-96 bg-crust-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <!-- Animated floating embers -->
+            <div class="ember" style="top: 80%; left: 15%; animation-delay: 0s;"></div>
+            <div class="ember" style="top: 70%; left: 35%; animation-delay: 1.5s;"></div>
+            <div class="ember" style="top: 75%; left: 65%; animation-delay: 0.8s;"></div>
+            <div class="ember" style="top: 85%; left: 85%; animation-delay: 2.2s;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Hero: Poetry & Tradition -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-clay-800/90 border border-crust-600/40 text-crust-200 text-xs font-semibold shadow-inner">
+                            <span class="text-flame-500">🔥</span>
+                            <span>Tong soat 05:00 da birinchi tandir uziladi</span>
+                        </div>
+
+                        <h1 class="font-heritage text-4xl sm:text-5xl lg:text-6xl text-white leading-tight">
+                            Loy tandir tafti, <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-crust-300 via-crust-400 to-flame-400 font-extrabold">
+                                o'tin olovida pishgan
+                            </span> <br>
+                            haqiqiy nonlar.
+                        </h1>
+
+                        <p class="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+                            Elektr pech emas — asil o'tin cho'g'i, tog' archasi hidi va oq unning sirlangan xamirturushi. Go'shtli non, Qo'qon patir, nafis ramashka va qatlama yog'li nonlarimizni dasturxoningizga issiq holatda yetkazamiz.
+                        </p>
+
+                        <!-- Key Pillars Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 max-w-xl mx-auto lg:mx-0">
+                            
+                            <div class="bg-clay-900/80 border border-crust-600/25 p-3.5 rounded-2xl flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-flame-500/10 text-flame-400 flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fas fa-fire-burner"></i>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-[10px] uppercase tracking-wider text-crust-300/70 font-semibold">Tandir</p>
+                                    <p class="text-xs font-bold text-white">Tabiiy O'tinda</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-clay-900/80 border border-crust-600/25 p-3.5 rounded-2xl flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-crust-500/10 text-crust-400 flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-[10px] uppercase tracking-wider text-crust-300/70 font-semibold">Ish vaqti</p>
+                                    <p class="text-xs font-bold text-white">05:00 - 20:00</p>
+                                </div>
+                            </div>
+
+                            <div class="col-span-2 sm:col-span-1 bg-clay-900/80 border border-crust-600/25 p-3.5 rounded-2xl flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0">
+                                    <i class="fas fa-truck-fast"></i>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-[10px] uppercase tracking-wider text-crust-300/70 font-semibold">Dastavka</p>
+                                    <p class="text-xs font-bold text-white">Issiq Holda</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Hero CTAs -->
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#menu" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-crust-600 via-flame-600 to-flame-500 hover:brightness-110 active:scale-95 text-white font-extrabold text-sm uppercase tracking-wider shadow-xl shadow-flame-600/30 transition flex items-center justify-center gap-2.5">
+                                <i class="fas fa-bread-slice"></i>
+                                <span>Nonlarni tanlash</span>
+                                <i class="fas fa-arrow-down text-xs ml-1"></i>
+                            </a>
+
+                            <a href="tel:+998980009454" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-clay-850 hover:bg-clay-800 text-crust-200 font-bold text-sm border border-crust-600/40 transition flex items-center justify-center gap-2.5">
+                                <i class="fas fa-phone-volume text-flame-500"></i>
+                                <span>98 000 94 54</span>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Hero: Artisan Bread Display Card -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative mx-auto max-w-md lg:max-w-none">
+                            
+                            <!-- Glowing ring background -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-flame-600/40 to-crust-500/30 rounded-3xl blur-2xl transform rotate-2"></div>
+                            
+                            <!-- Main Visual Showcase -->
+                            <div class="relative bg-clay-900 border border-crust-600/40 p-4 rounded-3xl shadow-2xl overflow-hidden tandir-glow">
+                                
+                                <div class="relative h-96 w-full rounded-2xl overflow-hidden group">
+                                    <!-- Real High Res Bread Photo -->
+                                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=85" 
+                                         alt="Tandir Nonlari" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out brightness-90">
+                                    
+                                    <div class="absolute inset-0 bg-gradient-to-t from-clay-950 via-clay-950/30 to-transparent"></div>
+
+                                    <!-- Chekich Pattern Watermark -->
+                                    <div class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-clay-950/80 backdrop-blur-md border border-crust-500/40 text-crust-200 text-xs font-bold flex items-center gap-2">
+                                        <i class="fas fa-stamp text-flame-400"></i>
+                                        <span>Shohona Naqshli</span>
+                                    </div>
+
+                                    <!-- Bread steam animation mockup -->
+                                    <div class="absolute bottom-28 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-none opacity-70">
+                                        <div class="w-2 h-10 bg-white/20 rounded-full blur-sm steam-bubble" style="animation-delay: 0s;"></div>
+                                        <div class="w-2.5 h-12 bg-white/25 rounded-full blur-sm steam-bubble" style="animation-delay: 1s;"></div>
+                                        <div class="w-1.5 h-8 bg-white/15 rounded-full blur-sm steam-bubble" style="animation-delay: 2s;"></div>
+                                    </div>
+
+                                    <!-- Bottom Info Overlay -->
+                                    <div class="absolute bottom-4 left-4 right-4 bg-clay-950/90 backdrop-blur-md p-4 rounded-2xl border border-crust-600/30 flex items-center justify-between">
+                                        <div>
+                                            <p class="text-[11px] text-flame-400 font-bold uppercase tracking-wider">Tandirdan uzilgan daqiqa</p>
+                                            <p class="text-sm font-extrabold text-white">Qarsildoq & Xushbo'y</p>
+                                            <p class="text-[11px] text-stone-400">Termo-sumkada harorati saqlanadi</p>
+                                        </div>
+                                        <div class="w-11 h-11 rounded-xl bg-flame-500/20 text-flame-400 flex items-center justify-center text-xl border border-flame-500/30">
+                                            <i class="fas fa-fire"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Daily Baking Timeline: Tonggi 05:00 dan 20:00 gacha -->
+        <section class="py-8 bg-clay-950 border-y border-crust-600/20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    
+                    <div class="p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                        <span class="text-flame-400 text-lg font-heritage font-bold">05:00</span>
+                        <h4 class="text-xs font-bold text-white mt-1">1-chi Tandir</h4>
+                        <p class="text-[11px] text-stone-400">Ertalabki nonushta uchun</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                        <span class="text-crust-300 text-lg font-heritage font-bold">11:30</span>
+                        <h4 class="text-xs font-bold text-white mt-1">Tushlik Tandiri</h4>
+                        <p class="text-[11px] text-stone-400">Osh va sho'rvalar hamrohi</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                        <span class="text-crust-300 text-lg font-heritage font-bold">16:30</span>
+                        <h4 class="text-xs font-bold text-white mt-1">Shom Tandiri</h4>
+                        <p class="text-[11px] text-stone-400">Kechki dasturxon uchun</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                        <span class="text-stone-400 text-lg font-heritage font-bold">20:00</span>
+                        <h4 class="text-xs font-bold text-white mt-1">So'nggi Zakaz</h4>
+                        <p class="text-[11px] text-stone-400">Ishxona yopilish vaqti</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Catalog: 4 Hil Nonvoyxona Nonlari -->
+        <section id="menu" class="py-16 md:py-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-flame-500/10 text-flame-400 text-xs font-bold tracking-widest uppercase border border-flame-500/30">
+                        <i class="fas fa-bread-slice"></i>
+                        <span>Bizning 4 Asil Nonimiz</span>
+                    </div>
+                    <h2 class="font-heritage text-3xl sm:text-5xl text-white">
+                        Dasturxon Ko'rki Bo'lgan Nonlar
+                    </h2>
+                    <p class="text-stone-400 text-sm sm:text-base font-light">
+                        Har bir non o'ziga xos ta'm, an'anaviy xamir va tandir olovining qudrati bilan yaratiladi.
+                    </p>
+                </div>
+
+                <!-- 4 Products Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                    
+                    <!-- 1. Go'shtli non -->
+                    <div class="bg-clay-900/90 rounded-3xl p-5 border border-crust-600/30 tandir-card-hover flex flex-col justify-between group relative overflow-hidden" data-id="1" data-name="Go'shtli non" data-price="20000">
+                        
+                        <!-- Top Tag -->
+                        <div class="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-gradient-to-r from-red-600 to-flame-600 text-white text-[11px] font-black uppercase tracking-wider shadow-md">
+                            🔥 Eng Xaridorgir
+                        </div>
+
+                        <div>
+                            <!-- Image Frame -->
+                            <div class="relative h-52 w-full rounded-2xl overflow-hidden mb-5 bg-clay-950">
+                                <img src="https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&w=650&q=85" 
+                                     alt="Go'shtli non" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700 brightness-95">
+                                <div class="absolute inset-0 bg-gradient-to-t from-clay-950 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 right-3 bg-clay-950/90 text-crust-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-crust-600/30">
+                                    ~450 g
+                                </span>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="space-y-2 mb-4">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-heritage font-bold text-2xl text-white group-hover:text-crust-300 transition">
+                                        Go'shtli non
+                                    </h3>
+                                </div>
+                                <p class="text-stone-300 text-xs leading-relaxed line-clamp-3">
+                                    Mayin mol go'shti, sersuv piyoz, xushbo'y zira va qora murch bilan to'ldirilgan to'yimli shohona tandir noni.
+                                </p>
+                                <div class="flex items-center gap-2 pt-1 text-[11px] text-stone-400">
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Toza mol go'shti</span>
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">O'tin tafti</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price & Action -->
+                        <div class="pt-4 border-t border-crust-600/20">
+                            <div class="flex items-baseline justify-between mb-3">
+                                <span class="text-xs text-stone-400">Narxi:</span>
+                                <span class="text-2xl font-black text-crust-300">20 000 <span class="text-xs text-stone-400 font-semibold">so'm</span></span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center bg-clay-950 border border-crust-600/40 rounded-xl overflow-hidden p-1">
+                                    <button onclick="decrementCardCount(1)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">-</button>
+                                    <span id="card-qty-1" class="w-8 text-center font-bold text-xs text-white">1</span>
+                                    <button onclick="incrementCardCount(1)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="addToCart(1, 'Go\'shtli non', 20000)" class="flex-1 py-3 px-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-flame-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>Savatga</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 2. Qo'qon patir -->
+                    <div class="bg-clay-900/90 rounded-3xl p-5 border border-crust-600/30 tandir-card-hover flex flex-col justify-between group relative overflow-hidden" data-id="2" data-name="Qo'qon patir" data-price="9000">
+                        
+                        <div class="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-clay-950/90 border border-crust-400/50 text-crust-200 text-[11px] font-bold uppercase tracking-wider">
+                            👑 Klassik Patir
+                        </div>
+
+                        <div>
+                            <div class="relative h-52 w-full rounded-2xl overflow-hidden mb-5 bg-clay-950">
+                                <img src="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=650&q=85" 
+                                     alt="Qo'qon patir" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700 brightness-95">
+                                <div class="absolute inset-0 bg-gradient-to-t from-clay-950 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 right-3 bg-clay-950/90 text-crust-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-crust-600/30">
+                                    ~520 g
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <h3 class="font-heritage font-bold text-2xl text-white group-hover:text-crust-300 transition">
+                                    Qo'qon patir
+                                </h3>
+                                <p class="text-stone-300 text-xs leading-relaxed line-clamp-3">
+                                    Afsonaviy Qo'qoncha naqshli, qarsildoq chetli, zich va bir necha kungacha yangi saqlanuvchi shohona patir.
+                                </p>
+                                <div class="flex items-center gap-2 pt-1 text-[11px] text-stone-400">
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Qarsildoq chet</span>
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Chekichli naqsh</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-crust-600/20">
+                            <div class="flex items-baseline justify-between mb-3">
+                                <span class="text-xs text-stone-400">Narxi:</span>
+                                <span class="text-2xl font-black text-crust-300">9 000 <span class="text-xs text-stone-400 font-semibold">so'm</span></span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center bg-clay-950 border border-crust-600/40 rounded-xl overflow-hidden p-1">
+                                    <button onclick="decrementCardCount(2)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">-</button>
+                                    <span id="card-qty-2" class="w-8 text-center font-bold text-xs text-white">1</span>
+                                    <button onclick="incrementCardCount(2)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="addToCart(2, 'Qo\'qon patir', 9000)" class="flex-1 py-3 px-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-flame-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>Savatga</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 3. Ramashka non -->
+                    <div class="bg-clay-900/90 rounded-3xl p-5 border border-crust-600/30 tandir-card-hover flex flex-col justify-between group relative overflow-hidden" data-id="3" data-name="Ramashka" data-price="8000">
+                        
+                        <div class="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-clay-950/90 border border-crust-400/50 text-crust-200 text-[11px] font-bold uppercase tracking-wider">
+                            🌼 Mayin & Yumshoq
+                        </div>
+
+                        <div>
+                            <div class="relative h-52 w-full rounded-2xl overflow-hidden mb-5 bg-clay-950">
+                                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=650&q=85" 
+                                     alt="Ramashka non" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700 brightness-95">
+                                <div class="absolute inset-0 bg-gradient-to-t from-clay-950 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 right-3 bg-clay-950/90 text-crust-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-crust-600/30">
+                                    ~380 g
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <h3 class="font-heritage font-bold text-2xl text-white group-hover:text-crust-300 transition">
+                                    Ramashka
+                                </h3>
+                                <p class="text-stone-300 text-xs leading-relaxed line-clamp-3">
+                                    Moychechak guli shaklida nafis tugilgan, dasturxonlarga fayz beruvchi paxtadek yumshoq va xushxo'r non.
+                                </p>
+                                <div class="flex items-center gap-2 pt-1 text-[11px] text-stone-400">
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Shirinbiyron</span>
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Bolajonlar sevimli</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-crust-600/20">
+                            <div class="flex items-baseline justify-between mb-3">
+                                <span class="text-xs text-stone-400">Narxi:</span>
+                                <span class="text-2xl font-black text-crust-300">8 000 <span class="text-xs text-stone-400 font-semibold">so'm</span></span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center bg-clay-950 border border-crust-600/40 rounded-xl overflow-hidden p-1">
+                                    <button onclick="decrementCardCount(3)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">-</button>
+                                    <span id="card-qty-3" class="w-8 text-center font-bold text-xs text-white">1</span>
+                                    <button onclick="incrementCardCount(3)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="addToCart(3, 'Ramashka', 8000)" class="flex-1 py-3 px-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-flame-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>Savatga</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 4. Yog'li non -->
+                    <div class="bg-clay-900/90 rounded-3xl p-5 border border-crust-600/30 tandir-card-hover flex flex-col justify-between group relative overflow-hidden" data-id="4" data-name="Yog'li non" data-price="5000">
+                        
+                        <div class="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-clay-950/90 border border-crust-400/50 text-crust-200 text-[11px] font-bold uppercase tracking-wider">
+                            🧈 Nonushta Gultoji
+                        </div>
+
+                        <div>
+                            <div class="relative h-52 w-full rounded-2xl overflow-hidden mb-5 bg-clay-950">
+                                <img src="https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&w=650&q=85" 
+                                     alt="Yog'li non" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700 brightness-95">
+                                <div class="absolute inset-0 bg-gradient-to-t from-clay-950 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-3 right-3 bg-clay-950/90 text-crust-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-crust-600/30">
+                                    ~320 g
+                                </span>
+                            </div>
+
+                            <div class="space-y-2 mb-4">
+                                <h3 class="font-heritage font-bold text-2xl text-white group-hover:text-crust-300 transition">
+                                    Yog'li non
+                                </h3>
+                                <p class="text-stone-300 text-xs leading-relaxed line-clamp-3">
+                                    Saryog' va qat-qat xamirdan tayyorlangan, ustiga sedana sepilgan ertalabki qaymoq va choyning eng yaxshi do'sti.
+                                </p>
+                                <div class="flex items-center gap-2 pt-1 text-[11px] text-stone-400">
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Qatlama xamir</span>
+                                    <span class="px-2 py-0.5 rounded-md bg-clay-800 text-crust-300">Sedanali</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-crust-600/20">
+                            <div class="flex items-baseline justify-between mb-3">
+                                <span class="text-xs text-stone-400">Narxi:</span>
+                                <span class="text-2xl font-black text-crust-300">5 000 <span class="text-xs text-stone-400 font-semibold">so'm</span></span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <div class="flex items-center bg-clay-950 border border-crust-600/40 rounded-xl overflow-hidden p-1">
+                                    <button onclick="decrementCardCount(4)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">-</button>
+                                    <span id="card-qty-4" class="w-8 text-center font-bold text-xs text-white">1</span>
+                                    <button onclick="incrementCardCount(4)" class="w-7 h-7 rounded-lg hover:bg-clay-800 text-stone-300 hover:text-white font-bold transition flex items-center justify-center">+</button>
+                                </div>
+                                <button onclick="addToCart(4, 'Yog\'li non', 5000)" class="flex-1 py-3 px-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-md shadow-flame-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i class="fas fa-cart-plus"></i>
+                                    <span>Savatga</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive: Dasturxon Mehmon Kalkulyatori -->
+        <section id="dasturxon" class="py-16 bg-clay-950 border-t border-crust-600/20 relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6">
+                
+                <div class="wood-texture p-8 sm:p-12 rounded-3xl border border-crust-600/40 shadow-2xl relative overflow-hidden tandir-glow">
+                    
+                    <div class="text-center space-y-3 mb-8">
+                        <span class="text-flame-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-clay-950 border border-crust-600/30">
+                            ☕ Qulaylik
+                        </span>
+                        <h3 class="font-heritage text-3xl sm:text-4xl text-white">
+                            Mehmon Kutish Kalkulyatori
+                        </h3>
+                        <p class="text-stone-300 text-sm">
+                            Dasturxoningizga nechta mehmon keladi? O'lchamni tanlang, biz eng maqbul nonlar to'plamini bir zumda savatga yig'ib beramiz:
+                        </p>
+                    </div>
+
+                    <!-- Guest Presets -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+                        
+                        <button onclick="calculateDasturxon(4)" class="preset-btn p-4 rounded-2xl bg-clay-900/90 border border-crust-600/30 hover:border-crust-400 text-center transition cursor-pointer group">
+                            <span class="text-2xl block mb-1">👨‍👩‍👧</span>
+                            <span class="font-bold text-white text-sm block">4 kishilik</span>
+                            <span class="text-[11px] text-stone-400">Oila davrasi</span>
+                        </button>
+
+                        <button onclick="calculateDasturxon(8)" class="preset-btn p-4 rounded-2xl bg-clay-900/90 border border-crust-600/30 hover:border-crust-400 text-center transition cursor-pointer group">
+                            <span class="text-2xl block mb-1">🫖</span>
+                            <span class="font-bold text-white text-sm block">8 kishilik</span>
+                            <span class="text-[11px] text-stone-400">Qadrdonlar</span>
+                        </button>
+
+                        <button onclick="calculateDasturxon(15)" class="preset-btn p-4 rounded-2xl bg-clay-900/90 border border-crust-600/30 hover:border-crust-400 text-center transition cursor-pointer group">
+                            <span class="text-2xl block mb-1">🎉</span>
+                            <span class="font-bold text-white text-sm block">15 kishilik</span>
+                            <span class="text-[11px] text-stone-400">Katta mehmondorchilik</span>
+                        </button>
+
+                        <button onclick="calculateDasturxon(30)" class="preset-btn p-4 rounded-2xl bg-clay-900/90 border border-crust-600/30 hover:border-crust-400 text-center transition cursor-pointer group">
+                            <span class="text-2xl block mb-1">👑</span>
+                            <span class="font-bold text-white text-sm block">30+ kishi</span>
+                            <span class="text-[11px] text-stone-400">To'y & Marosim</span>
+                        </button>
+
+                    </div>
+
+                    <!-- Calculated Result Box -->
+                    <div id="calc-result" class="bg-clay-950/80 p-6 rounded-2xl border border-crust-600/30 space-y-4">
+                        <div class="flex items-center justify-between border-b border-crust-600/20 pb-3">
+                            <span class="text-sm font-bold text-crust-300" id="calc-title">8 kishilik dasturxon uchun tavsiya:</span>
+                            <span class="text-lg font-black text-white" id="calc-price">66 000 so'm</span>
+                        </div>
+                        <p class="text-xs text-stone-300" id="calc-breakdown">
+                            • 2 ta Go'shtli non + 3 ta Qo'qon patir + 2 ta Ramashka
+                        </p>
+                        <button onclick="applyCalculatedBundle()" class="w-full py-3 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fas fa-check"></i>
+                            <span>Ushbu to'plamni savatga qo'shish</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Artisanal Secrets: Nega aynan biz? -->
+        <section id="sirlar" class="py-16 md:py-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <div class="space-y-6">
+                        <span class="text-flame-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-clay-900 border border-crust-600/30">
+                            🌿 Qadriyat
+                        </span>
+
+                        <h2 class="font-heritage text-3xl sm:text-5xl text-white leading-tight">
+                            Tandirimiz hech qachon sovumaydi.
+                        </h2>
+
+                        <p class="text-stone-300 text-sm sm:text-base leading-relaxed font-light">
+                            Biz ommaviy fabrika emasmiz. Har bir non tandir devoriga nonvoy ustozlarimizning qo'li bilan yopiladi. 05:00 da o'tin alangasidan chiqqan non hidi butun mahallaga taraladi.
+                        </p>
+
+                        <div class="space-y-4 pt-2">
+                            
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                                <div class="w-10 h-10 rounded-xl bg-flame-500/20 text-flame-400 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">Haqiqiy Cho'g' Tafti</h4>
+                                    <p class="text-xs text-stone-400 mt-0.5">Nonning tagi qarsildoq, mag'zi esa paxtadek mayin pishishi faqat tabiiy olovda hosil bo'ladi.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                                <div class="w-10 h-10 rounded-xl bg-crust-500/20 text-crust-300 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-temperature-arrow-up"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">Termo-sumkada Issiq Yetkazish</h4>
+                                    <p class="text-xs text-stone-400 mt-0.5">Non kuryer orqali qanday haroratda chiqqan bo'lsa, xuddi shunday tandir taftida yetib boradi.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-clay-900/60 border border-crust-600/20">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0 mt-0.5">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">24/7 Rasmiy Telegram Boti</h4>
+                                    <p class="text-xs text-stone-400 mt-0.5">@nonuz_bot orqali istalgan daqiqada buyurtma bera olasiz.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Right Visual Card -->
+                    <div class="relative">
+                        <div class="wood-texture p-8 rounded-3xl border border-crust-600/30 space-y-6">
+                            
+                            <div class="flex items-center justify-between border-b border-crust-600/20 pb-5">
+                                <div>
+                                    <span class="text-xs text-flame-400 font-bold uppercase tracking-wider">Kafolatimiz</span>
+                                    <h3 class="font-heritage text-2xl font-bold text-white">Sovumagan Non Qoidasi</h3>
+                                </div>
+                                <div class="w-12 h-12 rounded-2xl bg-flame-500/20 text-flame-400 flex items-center justify-center text-2xl">
+                                    <i class="fas fa-shield-heart"></i>
+                                </div>
+                            </div>
+
+                            <p class="text-stone-300 text-xs sm:text-sm leading-relaxed">
+                                Agar buyurtmangiz kuryer sababli yetib borgunicha sovub qolsa — hech qanday e'tirozsiz bepul yangi issiq nonga almashtirib beramiz!
+                            </p>
+
+                            <!-- Live Hotline -->
+                            <div class="bg-clay-950 p-5 rounded-2xl border border-crust-600/30 space-y-3">
+                                <p class="text-[11px] text-stone-400 uppercase tracking-wider font-semibold">Tezkor operator bilan bog'lanish:</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <a href="tel:+998980009454" class="p-3 rounded-xl bg-clay-900 hover:bg-clay-850 border border-crust-600/20 flex items-center justify-between text-xs font-bold text-crust-300 transition">
+                                        <span>+998 98 000 94 54</span>
+                                        <i class="fas fa-phone text-flame-500"></i>
+                                    </a>
+                                    <a href="tel:+998909019292" class="p-3 rounded-xl bg-clay-900 hover:bg-clay-850 border border-crust-600/20 flex items-center justify-between text-xs font-bold text-crust-300 transition">
+                                        <span>+998 90 901 92 92</span>
+                                        <i class="fas fa-phone text-flame-500"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Direct Order / Contact Banner -->
+        <section id="contacts" class="py-16 md:py-20 bg-clay-950 border-t border-crust-600/20">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6">
+                
+                <div class="relative bg-gradient-to-br from-crust-700 via-clay-900 to-clay-950 p-8 sm:p-14 rounded-3xl border border-crust-500/40 shadow-2xl text-center space-y-6 overflow-hidden tandir-glow">
+                    
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-clay-950/80 border border-flame-500/40 text-flame-400 text-xs font-bold uppercase tracking-wider">
+                        🛵 Tezkor Dastavka Xizmati
+                    </div>
+
+                    <h2 class="font-heritage text-3xl sm:text-5xl text-white font-extrabold leading-tight">
+                        Issiq non iforini hoziroq his qiling!
+                    </h2>
+
+                    <p class="text-stone-300 max-w-xl mx-auto text-sm sm:text-base font-light">
+                        Qo'ng'iroq qiling yoki Telegram orqali 2 daqiqada buyurtma bering. Kuryer termo-sumkada eshigingiz oldiga yetkazadi.
+                    </p>
+
+                    <!-- Large Call Buttons -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                        <a href="tel:+998980009454" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-crust-500 to-flame-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-base tracking-wider shadow-xl transition flex items-center justify-center gap-3">
+                            <i class="fas fa-phone-volume text-xl"></i>
+                            <span>98 000 94 54</span>
+                        </a>
+
+                        <a href="tel:+998909019292" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-clay-950 hover:bg-clay-900 border border-crust-500/40 text-crust-200 font-extrabold text-base tracking-wider transition flex items-center justify-center gap-3">
+                            <i class="fas fa-phone-volume text-xl text-flame-500"></i>
+                            <span>90 901 92 92</span>
+                        </a>
+
+                        <a href="https://t.me/nonuz_bot" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-sky-600 hover:bg-sky-500 active:scale-95 text-white font-extrabold text-base tracking-wider shadow-lg transition flex items-center justify-center gap-3">
+                            <i class="fab fa-telegram-plane text-xl"></i>
+                            <span>@nonuz_bot</span>
+                        </a>
+                    </div>
+
+                    <p class="text-xs text-crust-400/80 pt-2">
+                        ⏰ Har kuni ertalab 05:00 dan kechqurun 20:00 gacha buyurtmalar qabul qilinadi
+                    </p>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-clay-950 border-t border-crust-600/20 text-stone-400 py-12 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                
+                <div class="space-y-3 md:col-span-2">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-flame-600 flex items-center justify-center text-white text-lg">
+                            <i class="fas fa-bread-slice"></i>
+                        </div>
+                        <span class="font-heritage text-2xl font-bold text-white">TANDIR <span class="text-crust-400">NON</span></span>
+                    </div>
+                    <p class="text-stone-400 text-xs max-w-sm leading-relaxed">
+                        An'anaviy tandirda pishirilgan haqiqiy o'zbek nonlari. Ertalab soat 05:00 dan boshlab issiq va shifobaxsh nonlar yetkazib berish xizmati.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Non turlari</h4>
+                    <ul class="space-y-1.5 text-stone-400">
+                        <li>🥩 Go'shtli non — 20 000 so'm</li>
+                        <li>✨ Qo'qon patir — 9 000 so'm</li>
+                        <li>🌼 Ramashka — 8 000 so'm</li>
+                        <li>🧈 Yog'li non — 5 000 so'm</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">Ish vaqti & Bog'lanish</h4>
+                    <ul class="space-y-1.5 text-stone-300">
+                        <li><i class="far fa-clock text-flame-400 mr-1.5"></i> 05:00 - 20:00 (Har kuni)</li>
+                        <li><i class="fas fa-phone text-flame-400 mr-1.5"></i> +998 98 000 94 54</li>
+                        <li><i class="fas fa-phone text-flame-400 mr-1.5"></i> +998 90 901 92 92</li>
+                        <li><i class="fab fa-telegram text-sky-400 mr-1.5"></i> @nonuz_bot</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-crust-600/15 flex flex-col sm:flex-row justify-between items-center gap-3 text-[11px] text-stone-500">
+                <p>&copy; <span id="year">2026</span> Tandir Non. nonuz_bot rasmiy veb-ilovasi.</p>
+                <p>Termo-sumka bilan issiq holda yetkazish kafolatlangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Modal (Slide-over drawer) -->
+    <div id="cart-modal" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div id="cart-backdrop" onclick="toggleCartModal()" class="fixed inset-0 bg-clay-950/80 backdrop-blur-md transition-opacity opacity-0"></div>
+
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div id="cart-panel" class="w-screen max-w-md bg-clay-900 border-l border-crust-600/30 text-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+                
+                <!-- Drawer Header -->
+                <div class="p-5 bg-clay-950 border-b border-crust-600/20 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-flame-600 text-white flex items-center justify-center text-lg shadow-md">
+                            <i class="fas fa-shopping-basket"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold font-heritage text-white">Sizning Savatingiz</h2>
+                            <p class="text-[11px] text-stone-400" id="cart-items-count-label">0 ta mahsulot</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleCartModal()" class="w-8 h-8 rounded-xl hover:bg-clay-800 text-stone-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Items list -->
+                <div id="cart-items-list" class="flex-1 overflow-y-auto p-5 space-y-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Empty state placeholder -->
+                <div id="cart-empty-state" class="hidden flex-1 flex-col items-center justify-center p-8 text-center">
+                    <div class="w-20 h-20 rounded-2xl bg-clay-950 border border-crust-600/30 text-flame-400 flex items-center justify-center text-3xl mb-4 shadow-inner">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-1">Savatingiz bo'sh</h3>
+                    <p class="text-stone-400 text-xs max-w-xs mb-6">
+                        Menyudan xohlagan issiq nonlarni tanlang va savatga qo'shing!
+                    </p>
+                    <button onclick="toggleCartModal()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-crust-600 to-flame-600 text-white font-bold text-xs uppercase tracking-wider transition">
+                        Nonlarni tanlash
+                    </button>
+                </div>
+
+                <!-- Drawer Footer / Checkout -->
+                <div id="cart-footer" class="p-5 bg-clay-950 border-t border-crust-600/20 space-y-3">
+                    
+                    <div class="space-y-1 text-xs">
+                        <div class="flex justify-between text-stone-400">
+                            <span>Nonlar summasi:</span>
+                            <span id="cart-subtotal" class="font-bold text-white">0 so'm</span>
+                        </div>
+                        <div class="flex justify-between text-stone-400">
+                            <span>Dastavka:</span>
+                            <span class="text-emerald-400 font-semibold">Kuryer orqali</span>
+                        </div>
+                        <div class="border-t border-crust-600/20 pt-2 flex justify-between text-base font-black text-white">
+                            <span>Jami to'lov:</span>
+                            <span id="cart-total" class="text-crust-300">0 so'm</span>
+                        </div>
+                    </div>
+
+                    <!-- Client Inputs -->
+                    <div class="space-y-2 pt-1 border-t border-crust-600/20">
+                        <input type="text" id="order-customer-name" placeholder="Ismingiz" class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-clay-900 border border-crust-600/30 text-white placeholder-stone-500 focus:outline-none focus:border-flame-500">
+                        <input type="tel" id="order-customer-phone" placeholder="Telefon raqamingiz (+998 ...)" class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-clay-900 border border-crust-600/30 text-white placeholder-stone-500 focus:outline-none focus:border-flame-500">
+                        <textarea id="order-customer-address" rows="2" placeholder="Yetkazish manzili (ko'cha, uy raqami, mo'ljal)..." class="w-full px-3.5 py-2 text-xs rounded-xl bg-clay-900 border border-crust-600/30 text-white placeholder-stone-500 focus:outline-none focus:border-flame-500 resize-none"></textarea>
+                    </div>
+
+                    <!-- Submit Actions -->
+                    <div class="space-y-2 pt-1">
+                        <button onclick="submitOrderViaTelegram()" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-crust-600 via-flame-600 to-flame-500 hover:brightness-110 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-flame-600/30 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fab fa-telegram-plane text-sm"></i>
+                            <span>Buyurtmani Yuborish</span>
+                        </button>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:+998980009454" class="py-2.5 px-3 rounded-xl bg-clay-850 hover:bg-clay-800 text-crust-300 text-xs font-bold text-center flex items-center justify-center gap-1.5 border border-crust-600/30 transition">
+                                <i class="fas fa-phone text-flame-400"></i>
+                                <span>98 000 94 54</span>
+                            </a>
+                            <a href="tel:+998909019292" class="py-2.5 px-3 rounded-xl bg-clay-850 hover:bg-clay-800 text-crust-300 text-xs font-bold text-center flex items-center justify-center gap-1.5 border border-crust-600/30 transition">
+                                <i class="fas fa-phone text-flame-400"></i>
+                                <span>90 901 92 92</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-clay-950 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-flame-500/40 tandir-glow">
+            <div class="w-8 h-8 rounded-xl bg-flame-500 text-white flex items-center justify-center font-bold text-sm">
+                <i class="fas fa-check"></i>
+            </div>
+            <div>
+                <p id="toast-title" class="text-xs font-bold text-white">Savatga qo'shildi!</p>
+                <p id="toast-desc" class="text-xs text-crust-300">Non savatda</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Floating Action Bar -->
+    <div class="fixed bottom-4 left-4 right-4 z-40 md:hidden flex items-center gap-2">
+        <a href="tel:+998980009454" class="bg-clay-950 border border-crust-600/40 hover:bg-clay-900 text-crust-200 py-3.5 px-4 rounded-2xl shadow-2xl flex items-center justify-center gap-2 text-xs font-extrabold">
+            <i class="fas fa-phone text-flame-400"></i>
+            <span>Qo'ng'iroq</span>
+        </a>
+        <button onclick="toggleCartModal()" class="flex-1 bg-gradient-to-r from-crust-600 to-flame-600 hover:brightness-110 text-white py-3.5 px-4 rounded-2xl shadow-2xl shadow-flame-600/40 flex items-center justify-center gap-2 text-xs font-extrabold">
+            <i class="fas fa-shopping-basket"></i>
+            <span>Savat (<span id="mobile-cart-count">0</span>)</span>
+        </button>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

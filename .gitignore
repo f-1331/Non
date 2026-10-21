@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Telegram Serverless CLI credentials & state (MUHIM: sirli kalitlar chiqib ketmasligi uchun)
+.tgcloud/
+**/.tgcloud/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+*.env
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
