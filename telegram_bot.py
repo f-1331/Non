@@ -31,6 +31,7 @@ ADMIN_ID = None  # Masalan: 123456789
 # Do'kon ma'lumotlari
 WORK_HOURS = "05:00 - 24:00 (Har kuni dam olishsiz)"
 PHONES = ["+998 98 000 94 54", "+998 90 901 92 92"]
+SITE_URL = "https://non-uzb.vercel.app"
 
 # Mahsulotlar ro'yxati
 PRODUCTS = {
@@ -67,6 +68,9 @@ def main_reply_keyboard():
             [
                 KeyboardButton(text="⏰ Ish vaqti"),
                 KeyboardButton(text="📞 Bog'lanish & Dastavka")
+            ],
+            [
+                KeyboardButton(text="🌐 Saytni ochish (Non Savati)", web_app=WebAppInfo(url=SITE_URL))
             ]
         ],
         resize_keyboard=True
@@ -74,6 +78,9 @@ def main_reply_keyboard():
 
 def menu_inline_keyboard():
     buttons = [
+        [
+            InlineKeyboardButton(text="🚀 Saytda xarid qilish (Veb-Ilova)", web_app=WebAppInfo(url=SITE_URL))
+        ],
         [
             InlineKeyboardButton(text="🥩 Go'shtli non — 20 000 so'm", callback_data="prod_goshli")
         ],
@@ -92,6 +99,9 @@ def menu_inline_keyboard():
 def product_detail_keyboard(prod_key):
     return InlineKeyboardMarkup(
         inline_keyboard=[
+            [
+                InlineKeyboardButton(text="🚀 Saytda buyurtma berish", web_app=WebAppInfo(url=SITE_URL))
+            ],
             [
                 InlineKeyboardButton(text="📞 Qo'ng'iroq qilib buyurtma berish", callback_data="call_order")
             ],
