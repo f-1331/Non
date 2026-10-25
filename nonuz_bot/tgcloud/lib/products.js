@@ -4,7 +4,7 @@ export const BAKERY_INFO = {
   closeHour: 24,
   phones: ["+998 98 000 94 54", "+998 90 901 92 92"],
   workHoursText: "05:00 - 24:00 (Har kuni dam olishsiz)",
-  webAppUrl: "https://app8742728691.tgcloud.ai"
+  webAppUrl: "https://non-uzb.vercel.app"
 };
 
 export const PRODUCTS = {
