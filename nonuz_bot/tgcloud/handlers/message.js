@@ -53,7 +53,7 @@ Bizda har kuni erta tongdan tandirdan uzilgan eng sara issiq nonlar tayyorlanadi
 • 🌼 <b>Ramashka</b> — 8 000 so'm
 • 🧈 <b>Yog'li non</b> — 5 000 so'm
 
-⏰ <b>Ish vaqti:</b> 05:00 dan 20:00 gacha (Har kuni)
+⏰ <b>Ish vaqti:</b> 05:00 dan 24:00 gacha (Har kuni)
 🛵 <b>Dastavka:</b> Termo-sumkada tez va issiq yetkaziladi!
 
 Quyidagi tugmalar orqali buyurtma berishingiz mumkin 👇`;
@@ -156,12 +156,12 @@ Buyurtma berish uchun quyidagi tugmalardan birini bosing:`;
 `⏰ <b>TANDIR NON ISH VAQTI JADVALI:</b>
 
 🌅 <b>Ish boshlanishi:</b> Ertalab 05:00 da
-🌆 <b>Ish tugashi:</b> Kechqurun 20:00 da
+🌆 <b>Ish tugashi:</b> Kechasi 24:00 da (Yarim tun)
 📅 <b>Ish kunlari:</b> Har kuni (Dam olishsiz)
 
 🔥 <i>Har kuni erta tong soat 05:00 dan tandirdan birinchi issiq nonlar uziladi!</i>
 
-Dastavka xizmati ham 05:00 dan 20:00 gacha uzluksiz ishlaydi.`;
+Dastavka xizmati ham 05:00 dan 24:00 gacha uzluksiz ishlaydi.`;
 
     await api.sendMessage({
       chat_id: chatId,
@@ -181,7 +181,7 @@ Issiq tandir nonlariga hoziroq qo'ng'iroq qilib buyurtma berishingiz mumkin:
 📞 <b>+998 98 000 94 54</b>
 📞 <b>+998 90 901 92 92</b>
 
-⏰ <b>Qo'ng'iroqlarni qabul qilish:</b> 05:00 dan 20:00 gacha
+⏰ <b>Qo'ng'iroqlarni qabul qilish:</b> 05:00 dan 24:00 gacha
 📍 Buyurtmangiz termo-sumkada issiq holatda yetkaziladi!`;
 
     await api.sendMessage({

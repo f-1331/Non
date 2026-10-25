@@ -29,7 +29,7 @@ BOT_TOKEN = "8742728691:AAF-upc8Zhe8l9wRBbZcuqNLQdM3KA8XeYo"  # @BotFather dan o
 ADMIN_ID = None  # Masalan: 123456789
 
 # Do'kon ma'lumotlari
-WORK_HOURS = "05:00 - 20:00 (Har kuni dam olishsiz)"
+WORK_HOURS = "05:00 - 24:00 (Har kuni dam olishsiz)"
 PHONES = ["+998 98 000 94 54", "+998 90 901 92 92"]
 
 # Mahsulotlar ro'yxati
@@ -160,7 +160,7 @@ async def show_work_hours(message: Message):
     text = (
         "⏰ <b>Tandir Non Ish Vaqti:</b>\n\n"
         "🌅 <b>Ish boshlanadi:</b> Ertalab 05:00 da\n"
-        "🌆 <b>Ish tugaydi:</b> Kechqurun 20:00 da\n"
+        "🌆 <b>Ish tugaydi:</b> Kechasi 24:00 da (Yarim tun)\n"
         "📅 <b>Ish kunlari:</b> Har kuni (Dam olishsiz)\n\n"
         "🔥 <i>Har kuni erta tong soat 05:00 dan birinchi issiq nonlar tayyor bo'ladi!</i>"
     )
@@ -174,7 +174,7 @@ async def show_contacts(event: Message | CallbackQuery):
         "Issiq tandir nonlariga hoziroq qo'ng'iroq qilib buyurtma berishingiz mumkin:\n\n"
         "📞 <b>+998 98 000 94 54</b>\n"
         "📞 <b>+998 90 901 92 92</b>\n\n"
-        "⏰ <b>Buyurtma qabul vaqti:</b> 05:00 dan 20:00 gacha\n"
+        "⏰ <b>Buyurtma qabul vaqti:</b> 05:00 dan 24:00 gacha\n"
         "📍 Tezkor kuryer termo-sumkada issiq yetkazadi!"
     )
     if isinstance(event, CallbackQuery):
