@@ -1,11 +1,77 @@
 import { api } from 'sdk';
 import { BAKERY_INFO, PRODUCTS } from '../lib/products.js';
+import { isOwner, isSystemActive, getSystemStats } from '../lib/system.js';
 
 export default async function (message, ctx) {
   const chatId = message.chat.id;
   const text = message.text ? message.text.trim() : '';
+  const owner = await isOwner(message.from);
+  const active = await isSystemActive();
 
-  // 1. Mini App orqali yuborilgan buyurtma (WebAppData)
+  // 1. Agar tizim to'xtatilgan bo'lsa va foydalanuvchi owner bo'lmasa
+  if (!owner && !active) {
+    await api.sendMessage({
+      chat_id: chatId,
+      text: 
+`⚠️ <b>Hurmatli mijoz!</b>
+
+Hozirda nonvoyxonamizda profilaktika va texnik ishlar olib borilmoqda. Shu sababli buyurtmalar qabuli vaqtincha to'xtatildi.
+
+Tez orada yana issiq nonlar bilan xizmatingizdamiz!
+📞 Aloqa va ma'lumot uchun: <b>+998 98 000 94 54</b>`,
+      parse_mode: 'HTML'
+    });
+    return;
+  }
+
+  // 2. Owner uchun boshqaruv paneli (/admin, /panel yoki owner /start bosganda)
+  if (owner && (text === '/admin' || text === '/panel' || text.startsWith('/start'))) {
+    const stats = await getSystemStats();
+    const panelText = 
+`🎛 <b>Boshqaruv Paneli</b>
+
+📊 <b>Tizim holati:</b> ${active ? '🟢 FAOL (Ishlamoqda)' : '🔴 TO\'XTATILGAN (Profilaktika)'}
+🌐 <b>Sayt:</b> ${BAKERY_INFO.webAppUrl}
+🤖 <b>Bot holati:</b> ${active ? '🟢 Buyurtmalar qabul qilinmoqda' : '🔴 Buyurtmalar to\'xtatilgan'}
+📦 <b>Jami buyurtmalar:</b> ${stats.count} ta
+
+Kerakli amalni tanlang:`;
+
+    const adminButtons = active ? [
+      [
+        { text: "🔴 Tizimni to'xtatish (Sayt & Bot)", callback_data: "admin_toggle_off" }
+      ],
+      [
+        { text: "📦 So'nggi buyurtmalar", callback_data: "admin_view_stats" },
+        { text: "🍞 Mijoz menyusi", callback_data: "admin_client_menu" }
+      ],
+      [
+        { text: "🌐 Saytni ochish", web_app: { url: BAKERY_INFO.webAppUrl } }
+      ]
+    ] : [
+      [
+        { text: "🟢 Tizimni qayta ishga tushirish", callback_data: "admin_toggle_on" }
+      ],
+      [
+        { text: "📦 So'nggi buyurtmalar", callback_data: "admin_view_stats" }
+      ],
+      [
+        { text: "🌐 Saytni ochish (Ko'rik)", web_app: { url: BAKERY_INFO.webAppUrl } }
+      ]
+    ];
+
+    await api.sendMessage({
+      chat_id: chatId,
+      text: panelText,
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: adminButtons
+      }
+    });
+    return;
+  }
+
+  // 3. Mini App orqali yuborilgan buyurtma (WebAppData)
   if (message.web_app_data) {
     try {
       const order = JSON.parse(message.web_app_data.data);
@@ -40,7 +106,7 @@ Savollar bo'lsa: <b>98 000 94 54</b>`;
     }
   }
 
-  // 2. /start yoki /help buyrug'i
+  // 4. /start yoki /help buyrug'i (Oddiy mijoz uchun)
   if (text.startsWith('/start') || text === '/help') {
     const welcome = 
 `Assalomu alaykum, <b>${message.from?.first_name || 'Hurmatli mijoz'}</b>! 🍞
@@ -105,7 +171,7 @@ Quyidagi tugmalar orqali buyurtma berishingiz mumkin 👇`;
     return;
   }
 
-  // 3. Menyu so'ralganda
+  // 5. Menyu so'ralganda
   if (text === "🍞 Nonlarimiz (Menyu)" || text.startsWith('/menu')) {
     const menuText = 
 `🥖 <b>BIZNING TANDIR NONLARIMIZ:</b>
@@ -150,7 +216,7 @@ Buyurtma berish uchun quyidagi tugmalardan birini bosing:`;
     return;
   }
 
-  // 4. Ish vaqti
+  // 6. Ish vaqti
   if (text === "⏰ Ish vaqti" || text.startsWith('/hours')) {
     const workText = 
 `⏰ <b>TANDIR NON ISH VAQTI JADVALI:</b>
@@ -171,7 +237,7 @@ Dastavka xizmati ham 05:00 dan 24:00 gacha uzluksiz ishlaydi.`;
     return;
   }
 
-  // 5. Aloqa va dastavka
+  // 7. Aloqa va dastavka
   if (text === "📞 Bog'lanish" || text === "🛵 Dastavka buyurtma berish" || text.startsWith('/contact')) {
     const contactText = 
 `🛵 <b>DASTAVKA VA BUYURTMA UCHUN:</b>

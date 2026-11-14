@@ -3,15 +3,13 @@ Tandir Non - Rasmiy Telegram Boti
 aiogram 3.x asosida tayyorlangan.
 
 Ishga tushirish uchun:
-1. @BotFather dan yangi bot ochib TOKEN oling.
-2. Quyidagi BOT_TOKEN o'rniga o'z tokeningizni yozing.
-3. Terminalda ishga tushiring: python telegram_bot.py
+1. Terminalda ishga tushiring: python telegram_bot.py
 """
 
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import (
     Message, 
     CallbackQuery, 
@@ -19,21 +17,19 @@ from aiogram.types import (
     InlineKeyboardButton, 
     ReplyKeyboardMarkup, 
     KeyboardButton,
-    WebAppInfo
+    WebAppInfo,
+    MenuButtonWebApp,
+    MenuButtonDefault
 )
 
 # ==================== SOZLAMALAR ====================
-BOT_TOKEN = "8742728691:AAF-upc8Zhe8l9wRBbZcuqNLQdM3KA8XeYo"  # @BotFather dan olingan token
+BOT_TOKEN = "8742728691:AAF-upc8Zhe8l9wRBbZcuqNLQdM3KA8XeYo"
+OWNER_USERNAME = "fayzbek1331"
 
-# Admin yoki buyurtma tushadigan guruh/kanal/admin ID
-ADMIN_ID = None  # Masalan: 123456789
-
-# Do'kon ma'lumotlari
 WORK_HOURS = "05:00 - 24:00 (Har kuni dam olishsiz)"
 PHONES = ["+998 98 000 94 54", "+998 90 901 92 92"]
 SITE_URL = "https://non-uzb.vercel.app"
 
-# Mahsulotlar ro'yxati
 PRODUCTS = {
     "goshli": {
         "name": "Go'shtli non",
@@ -57,7 +53,66 @@ PRODUCTS = {
     }
 }
 
+# ==================== YORDAMCHI FUNKSIYALAR ====================
+def is_owner(user) -> bool:
+    return bool(user and user.username and user.username.lower() == OWNER_USERNAME.lower())
+
+async def get_system_status(bot: Bot) -> bool:
+    try:
+        desc = await bot.get_my_short_description()
+        if desc and desc.short_description and desc.short_description.startswith("[OFF]"):
+            return False
+    except Exception:
+        pass
+    return True
+
+async def set_system_status(bot: Bot, active: bool):
+    try:
+        if active:
+            await bot.set_my_short_description(
+                short_description="Tandir Non — Issiq va mazali nonlar. Sayt: https://non-uzb.vercel.app"
+            )
+            await bot.set_chat_menu_button(
+                menu_button=MenuButtonWebApp(
+                    text="🍞 Non Menyusi",
+                    web_app=WebAppInfo(url=SITE_URL)
+                )
+            )
+        else:
+            await bot.set_my_short_description(
+                short_description="[OFF] Tandir Non vaqtincha buyurtma qabul qilmayapti."
+            )
+            await bot.set_chat_menu_button(
+                menu_button=MenuButtonDefault()
+            )
+    except Exception as e:
+        logging.error(f"Holatni o'zgartirishda xatolik: {e}")
+
 # ==================== TUGMALAR (KEYBOARDS) ====================
+def owner_panel_keyboard(active: bool):
+    if active:
+        buttons = [
+            [
+                InlineKeyboardButton(text="🔴 Tizimni to'xtatish (Sayt & Bot)", callback_data="admin_toggle_off")
+            ],
+            [
+                InlineKeyboardButton(text="🍞 Mijoz menyusi ko'rinishi", callback_data="admin_client_menu")
+            ],
+            [
+                InlineKeyboardButton(text="🌐 Saytni ochish", web_app=WebAppInfo(url=SITE_URL))
+            ]
+        ]
+    else:
+        buttons = [
+            [
+                InlineKeyboardButton(text="🟢 Tizimni qayta ishga tushirish (1 bosishda)", callback_data="admin_toggle_on")
+            ],
+            [
+                InlineKeyboardButton(text="🌐 Saytni ko'rish", web_app=WebAppInfo(url=SITE_URL))
+            ]
+        ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
 def main_reply_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
@@ -111,11 +166,50 @@ def product_detail_keyboard(prod_key):
         ]
     )
 
+MAINTENANCE_TEXT = (
+    "⚠️ <b>Hurmatli mijoz!</b>\n\n"
+    "Hozirda nonvoyxonamizda profilaktika va texnik ishlar olib borilmoqda. "
+    "Shu sababli buyurtmalar qabuli vaqtincha to'xtatildi.\n\n"
+    "Tez orada yana issiq nonlar bilan xizmatingizdamiz!\n"
+    "📞 Aloqa va ma'lumot uchun: <b>+998 98 000 94 54</b>"
+)
+
 # ==================== DISPATCHER & HANDLERS ====================
 dp = Dispatcher()
 
+@dp.message(Command("admin", "panel"))
+async def cmd_admin(message: Message, bot: Bot):
+    if not is_owner(message.from_user):
+        return
+    active = await get_system_status(bot)
+    panel_text = (
+        f"🎛 <b>Boshqaruv Paneli</b>\n\n"
+        f"📊 <b>Tizim holati:</b> {'🟢 FAOL (Ishlamoqda)' if active else '🔴 TO\'XTATILGAN (Profilaktika)'}\n"
+        f"🌐 <b>Sayt:</b> {SITE_URL}\n"
+        f"🤖 <b>Bot holati:</b> {'🟢 Mijozlarga ochiq' if active else '🔴 Profilaktika rejimida'}\n\n"
+        f"Quyidagi tugma orqali butun tizimni 1 bosishda to'xtatishingiz yoki yoqishingiz mumkin:"
+    )
+    await message.answer(panel_text, reply_markup=owner_panel_keyboard(active), parse_mode="HTML")
+
 @dp.message(CommandStart())
-async def cmd_start(message: Message):
+async def cmd_start(message: Message, bot: Bot):
+    # Agar owner bo'lsa, boshqaruv panelini ko'rsatamiz
+    if is_owner(message.from_user):
+        active = await get_system_status(bot)
+        panel_text = (
+            f"🎛 <b>Boshqaruv Paneli</b>\n\n"
+            f"📊 <b>Tizim holati:</b> {'🟢 FAOL (Ishlamoqda)' if active else '🔴 TO\'XTATILGAN (Profilaktika)'}\n"
+            f"🌐 <b>Sayt:</b> {SITE_URL}\n\n"
+            f"Boshqaruv tugmalari:"
+        )
+        await message.answer(panel_text, reply_markup=owner_panel_keyboard(active), parse_mode="HTML")
+        return
+
+    active = await get_system_status(bot)
+    if not active:
+        await message.answer(MAINTENANCE_TEXT, parse_mode="HTML")
+        return
+
     welcome_text = (
         f"Assalomu alaykum, <b>{message.from_user.full_name}</b>!\n\n"
         f"🔥 <b>Tandir Non</b> yetkazib berish botiga xush kelibsiz!\n\n"
@@ -126,8 +220,54 @@ async def cmd_start(message: Message):
     )
     await message.answer(welcome_text, reply_markup=main_reply_keyboard(), parse_mode="HTML")
 
+# Owner harakatlari (Callback)
+@dp.callback_query(F.data == "admin_toggle_off")
+async def cb_admin_toggle_off(callback: CallbackQuery, bot: Bot):
+    if not is_owner(callback.from_user):
+        await callback.answer("Ruxsat berilmagan!", show_alert=True)
+        return
+
+    await set_system_status(bot, False)
+    text = (
+        "🔴 <b>Tizim to'xtatildi!</b>\n\n"
+        "• Sayt va Botda profilaktika rejimi yoqildi.\n"
+        "• Mijozlar buyurtma bera olmaydi.\n\n"
+        "Qayta ishga tushirish uchun quyidagi tugmani bosing:"
+    )
+    await callback.message.edit_text(text, reply_markup=owner_panel_keyboard(False), parse_mode="HTML")
+    await callback.answer("Tizim to'xtatildi!")
+
+@dp.callback_query(F.data == "admin_toggle_on")
+async def cb_admin_toggle_on(callback: CallbackQuery, bot: Bot):
+    if not is_owner(callback.from_user):
+        await callback.answer("Ruxsat berilmagan!", show_alert=True)
+        return
+
+    await set_system_status(bot, True)
+    text = (
+        "🟢 <b>Tizim qayta ishga tushirildi!</b>\n\n"
+        "• Sayt va Bot to'liq faol holatga keltirildi.\n"
+        "• Buyurtmalar qabuli qayta ochildi."
+    )
+    await callback.message.edit_text(text, reply_markup=owner_panel_keyboard(True), parse_mode="HTML")
+    await callback.answer("Tizim ishga tushirildi!")
+
+@dp.callback_query(F.data == "admin_client_menu")
+async def cb_admin_client_menu(callback: CallbackQuery):
+    if not is_owner(callback.from_user):
+        return
+    text = "🥖 <b>Mijoz menyusi ko'rinishi:</b>"
+    await callback.message.answer(text, reply_markup=menu_inline_keyboard(), parse_mode="HTML")
+    await callback.answer()
+
 @dp.message(F.text == "🍞 Nonlarimiz (Menyu)")
-async def show_menu(message: Message):
+async def show_menu(message: Message, bot: Bot):
+    if not is_owner(message.from_user):
+        active = await get_system_status(bot)
+        if not active:
+            await message.answer(MAINTENANCE_TEXT, parse_mode="HTML")
+            return
+
     text = (
         "🥖 <b>Bizning Tandir Nonlarimiz:</b>\n\n"
         "1. <b>Go'shtli non</b> — 20 000 so'm\n"
@@ -139,7 +279,13 @@ async def show_menu(message: Message):
     await message.answer(text, reply_markup=menu_inline_keyboard(), parse_mode="HTML")
 
 @dp.callback_query(F.data.startswith("prod_"))
-async def product_callback(callback: CallbackQuery):
+async def product_callback(callback: CallbackQuery, bot: Bot):
+    if not is_owner(callback.from_user):
+        active = await get_system_status(bot)
+        if not active:
+            await callback.answer("Profilaktika tufayli vaqtincha to'xtatilgan", show_alert=True)
+            return
+
     prod_key = callback.data.split("_")[1]
     prod = PRODUCTS.get(prod_key)
     if prod:
@@ -153,7 +299,14 @@ async def product_callback(callback: CallbackQuery):
     await callback.answer()
 
 @dp.callback_query(F.data == "back_to_menu")
-async def back_menu_callback(callback: CallbackQuery):
+async def back_menu_callback(callback: CallbackQuery, bot: Bot):
+    if not is_owner(callback.from_user):
+        active = await get_system_status(bot)
+        if not active:
+            await callback.message.edit_text(MAINTENANCE_TEXT, parse_mode="HTML")
+            await callback.answer()
+            return
+
     text = (
         "🥖 <b>Bizning Tandir Nonlarimiz:</b>\n\n"
         "1. <b>Go'shtli non</b> — 20 000 so'm\n"
@@ -193,10 +346,14 @@ async def show_contacts(event: Message | CallbackQuery):
     else:
         await event.answer(text, parse_mode="HTML")
 
-# WebApp dan kelgan ma'lumotlarni qabul qilish
 @dp.message(F.web_app_data)
-async def handle_web_app_data(message: Message):
-    data = message.web_app_data.data
+async def handle_web_app_data(message: Message, bot: Bot):
+    if not is_owner(message.from_user):
+        active = await get_system_status(bot)
+        if not active:
+            await message.answer(MAINTENANCE_TEXT, parse_mode="HTML")
+            return
+
     await message.answer(
         f"✅ <b>Buyurtmangiz qabul qilindi!</b>\n\n"
         f"Operatorlarimiz tez orada siz bilan bog'lanishadi.\n\n"
@@ -207,15 +364,6 @@ async def handle_web_app_data(message: Message):
 # ==================== MAIN ====================
 async def main():
     logging.basicConfig(level=logging.INFO)
-    if BOT_TOKEN == "BOT_TOKENINGIZNI_BU_YERGA_YOZING":
-        print("\n" + "="*60)
-        print("DIQQAT: Botni ishga tushirish uchun BOT_TOKEN kiriting!")
-        print("1. Telegramda @BotFather ga kiring.")
-        print("2. /newbot buyrug'i orqali yangi bot yarating.")
-        print("3. Berilgan HTTP API tokenni telegram_bot.py faylidagi BOT_TOKEN ga qo'ying.")
-        print("="*60 + "\n")
-        return
-
     bot = Bot(token=BOT_TOKEN)
     print("🤖 Tandir Non boti ishga tushdi...")
     await dp.start_polling(bot)

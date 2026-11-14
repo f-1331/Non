@@ -4,7 +4,7 @@
 const BAKERY_CONFIG = {
     name: "Tandir Non",
     openHour: 5,   // Ertalabki 5:00
-    closeHour: 20, // Kechqurungi 20:00
+    closeHour: 24, // Kechasi 24:00 (Yarim tun)
     phones: ["+998980009454", "+998909019292"],
     telegramUsername: "nonuz_bot"
 };
@@ -461,6 +461,11 @@ function applyCalculatedBundle() {
 
 // 8. Buyurtmani yuborish (Telegram WebApp & Direct)
 function submitOrderViaTelegram() {
+    if (!systemIsActive && !isOwnerSession) {
+        alert("Hozirda profilaktika va texnik ishlar tufayli buyurtmalar qabuli vaqtincha to'xtatilgan!");
+        return;
+    }
+
     const itemKeys = Object.keys(cart);
     if (itemKeys.length === 0) {
         alert("Savat bo'sh! Iltimos avval non tanlang.");
@@ -559,6 +564,103 @@ Ish vaqti: 05:00 - 20:00`;
     showToast("Telegram ochilmoqda...", "Xabarni tasdiqlash uchun yuboring.");
 }
 
+// ==================== TIZIM HOLATI VA BOSHQARUV ====================
+let systemIsActive = true;
+let isOwnerSession = false;
+
+function detectOwner() {
+    try {
+        const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        if (user && user.username && user.username.toLowerCase() === 'fayzbek1331') {
+            return true;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('admin') === 'fayzbek1331' || urlParams.get('owner') === 'fayzbek1331') {
+            return true;
+        }
+    } catch (e) {}
+    return false;
+}
+
+async function syncSystemStatus() {
+    isOwnerSession = detectOwner();
+    const ownerBar = document.getElementById("owner-control-bar");
+    const overlay = document.getElementById("maintenance-overlay");
+
+    try {
+        const res = await fetch('/api/status', { cache: 'no-store' });
+        if (res.ok) {
+            const data = await res.json();
+            if (typeof data.active === 'boolean') {
+                systemIsActive = data.active;
+            }
+        }
+    } catch (e) {
+        // Tarmoq xatoligida sukut bo'yicha faol
+    }
+
+    if (isOwnerSession) {
+        if (ownerBar) {
+            ownerBar.classList.remove("hidden");
+            const dot = document.getElementById("owner-status-dot");
+            const label = document.getElementById("owner-status-label");
+            const btn = document.getElementById("owner-toggle-btn");
+            const btnText = document.getElementById("owner-toggle-text");
+
+            if (systemIsActive) {
+                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                if (label) label.innerText = "Tizim FAOL (Sayt & Bot ishlamoqda)";
+                if (btn) btn.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer bg-red-600/90 hover:bg-red-500 text-white border border-red-400/40";
+                if (btnText) btnText.innerText = "Tizimni to'xtatish (1 bosishda)";
+            } else {
+                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-red-500 animate-ping";
+                if (label) label.innerText = "Tizim TO'XTATILGAN (Profilaktika)";
+                if (btn) btn.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer bg-emerald-600/90 hover:bg-emerald-500 text-white border border-emerald-400/40";
+                if (btnText) btnText.innerText = "Tizimni ishga tushirish (1 bosishda)";
+            }
+        }
+        if (overlay) overlay.classList.add("hidden");
+    } else {
+        if (ownerBar) ownerBar.classList.add("hidden");
+        if (overlay) {
+            if (!systemIsActive) {
+                overlay.classList.remove("hidden");
+            } else {
+                overlay.classList.add("hidden");
+            }
+        }
+    }
+}
+
+async function toggleSystemByOwner() {
+    if (!isOwnerSession) return;
+    const btnText = document.getElementById("owner-toggle-text");
+    if (btnText) btnText.innerText = "Bajarilmoqda...";
+
+    const newTarget = !systemIsActive;
+    try {
+        const res = await fetch('/api/status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: newTarget ? 'on' : 'off',
+                username: 'fayzbek1331'
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            systemIsActive = data.active;
+            showToast(
+                systemIsActive ? "Tizim ishga tushirildi!" : "Tizim to'xtatildi!",
+                systemIsActive ? "Sayt va bot mijozlar uchun faollashtirildi." : "Sayt va botda profilaktika rejimi yoqildi."
+            );
+        }
+    } catch (e) {
+        showToast("Xatolik yuz berdi", e.message);
+    }
+    await syncSystemStatus();
+}
+
 // Boshlang'ich yuklash
 document.addEventListener("DOMContentLoaded", () => {
     const yearEl = document.getElementById("year");
@@ -569,6 +671,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     calculateDasturxon(8);
     loadCart();
+
+    syncSystemStatus();
+    setInterval(syncSystemStatus, 15000);
 
     if (window.Telegram && window.Telegram.WebApp) {
         window.Telegram.WebApp.ready();

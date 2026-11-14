@@ -10,3 +10,8 @@ export const orders = table('orders', {
   totalPrice: integer('total_price').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
 });
+
+export const settings = table('settings', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+});

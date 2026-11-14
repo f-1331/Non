@@ -126,6 +126,23 @@
 </head>
 <body class="chekich-bg text-stone-200 font-sans antialiased selection:bg-crust-500 selection:text-clay-950 pb-20 md:pb-0">
 
+    <!-- Owner Discreet Control Banner -->
+    <div id="owner-control-bar" class="hidden bg-gradient-to-r from-clay-950 via-stone-900 to-clay-950 border-b border-flame-500/40 px-4 py-2.5 text-xs text-crust-200 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <span id="owner-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-bold tracking-wide uppercase text-[11px] text-crust-400">Boshqaruv:</span>
+                <span id="owner-status-label" class="font-medium text-stone-200">Tizim holati tekshirilmoqda...</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="owner-toggle-btn" onclick="toggleSystemByOwner()" class="px-3.5 py-1.5 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer bg-red-600/80 hover:bg-red-500 text-white border border-red-400/40">
+                    <i class="fas fa-power-off"></i>
+                    <span id="owner-toggle-text">Tizimni to'xtatish</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Ambient Sound Audio Button & Top Live Tandir Bar -->
     <div class="border-b border-crust-600/20 bg-clay-950/80 backdrop-blur-md sticky top-0 z-50 text-xs">
         <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-3">
@@ -1009,6 +1026,38 @@
             <i class="fas fa-shopping-basket"></i>
             <span>Savat (<span id="mobile-cart-count">0</span>)</span>
         </button>
+    </div>
+
+    <!-- Fullscreen Maintenance Overlay -->
+    <div id="maintenance-overlay" class="hidden fixed inset-0 z-[100] bg-clay-950/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-clay-900/90 border border-crust-600/30 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden tandir-glow">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-flame-500/10 border border-flame-500/30 flex items-center justify-center">
+                <i class="fas fa-tools text-flame-500 text-3xl animate-pulse"></i>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-flame-500/15 border border-flame-500/30 text-crust-300 text-xs font-semibold uppercase tracking-wider">
+                Vaqtincha Profilaktika
+            </span>
+            <h2 class="text-2xl font-heritage font-bold text-crust-100 mt-4 mb-3">
+                Nonvoyxonamizda Texnik Tanaffus
+            </h2>
+            <p class="text-stone-400 text-sm leading-relaxed mb-6">
+                Hurmatli mijoz! Ayni damda nonvoyxonamizda profilaktika va sifatni yaxshilash ishlari olib borilmoqda. Buyurtmalar qabuli vaqtincha to'xtatildi. Tez orada yana tandirdan uzilgan eng sara issiq nonlarimiz bilan xizmatingizda bo'lamiz!
+            </p>
+            <div class="bg-clay-850/80 border border-crust-600/20 rounded-2xl p-4 text-left mb-6">
+                <p class="text-xs text-stone-400 mb-2 font-medium">Shoshilinch aloqa va ma'lumot uchun:</p>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <a href="tel:+998980009454" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-flame-500/20 border border-flame-500/30 text-crust-200 text-xs font-bold hover:bg-flame-500/30 transition">
+                        <i class="fas fa-phone"></i> 98 000 94 54
+                    </a>
+                    <a href="tel:+998909019292" class="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-flame-500/20 border border-flame-500/30 text-crust-200 text-xs font-bold hover:bg-flame-500/30 transition">
+                        <i class="fas fa-phone"></i> 90 901 92 92
+                    </a>
+                </div>
+            </div>
+            <p class="text-[11px] text-stone-500">
+                ⏰ Ish vaqti: Har kuni 05:00 dan 24:00 gacha
+            </p>
+        </div>
     </div>
 
     <!-- Main JavaScript Logic -->

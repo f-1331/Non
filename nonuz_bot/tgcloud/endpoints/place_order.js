@@ -1,8 +1,16 @@
 import { db, api, EndpointError } from 'sdk';
 import { orders } from '../schema.js';
+import { isSystemActive, isOwner } from '../lib/system.js';
 
 export default async function (input, ctx) {
   const user = ctx.initData?.user;
+  const active = await isSystemActive();
+  const owner = await isOwner(user);
+
+  if (!active && !owner) {
+    throw new EndpointError('Hozirda profilaktika ishlari olib borilmoqda. Buyurtmalar qabuli vaqtincha to\'xtatilgan.', { code: 'MAINTENANCE' });
+  }
+
   const { customerName, customerPhone, customerAddress, items, totalPrice } = input;
 
   if (!customerPhone || !items) {
