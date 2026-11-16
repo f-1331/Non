@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/health",
-      "destination": "https://non-sayti.onrender.com/health"
+      "destination": "https://paul-lamb-ecological-option.trycloudflare.com/health"
     },
     {
       "source": "/backend/:match*",
-      "destination": "https://non-sayti.onrender.com/:match*"
+      "destination": "https://paul-lamb-ecological-option.trycloudflare.com/:match*"
     }
   ]
 }
