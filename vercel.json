@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/health",
-      "destination": "https://paul-lamb-ecological-option.trycloudflare.com/health"
+      "destination": "https://associations-flood-adjust-personalized.trycloudflare.com/health"
     },
     {
       "source": "/backend/:match*",
-      "destination": "https://paul-lamb-ecological-option.trycloudflare.com/:match*"
+      "destination": "https://associations-flood-adjust-personalized.trycloudflare.com/:match*"
     }
   ]
 }
