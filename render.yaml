@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: non-sayti
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_unified_server.py
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        value: 8742728691:AAF-upc8Zhe8l9wRBbZcuqNLQdM3KA8XeYo
+      - key: OWNER_USERNAME
+        value: fayzbek1331
+      - key: OWNER_TELEGRAM_ID
+        value: "6707839718"
+      - key: PORT
+        value: "3002"

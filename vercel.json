@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": "https://non-sayti.onrender.com/health"
+    },
+    {
+      "source": "/backend/:match*",
+      "destination": "https://non-sayti.onrender.com/:match*"
+    }
+  ]
+}
