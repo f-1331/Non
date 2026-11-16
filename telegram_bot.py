@@ -182,11 +182,13 @@ async def cmd_admin(message: Message, bot: Bot):
     if not is_owner(message.from_user):
         return
     active = await get_system_status(bot)
+    status_text = "🟢 FAOL (Ishlamoqda)" if active else "🔴 TO'XTATILGAN (Profilaktika)"
+    bot_status = "🟢 Mijozlarga ochiq" if active else "🔴 Profilaktika rejimida"
     panel_text = (
         f"🎛 <b>Boshqaruv Paneli</b>\n\n"
-        f"📊 <b>Tizim holati:</b> {'🟢 FAOL (Ishlamoqda)' if active else '🔴 TO\'XTATILGAN (Profilaktika)'}\n"
+        f"📊 <b>Tizim holati:</b> {status_text}\n"
         f"🌐 <b>Sayt:</b> {SITE_URL}\n"
-        f"🤖 <b>Bot holati:</b> {'🟢 Mijozlarga ochiq' if active else '🔴 Profilaktika rejimida'}\n\n"
+        f"🤖 <b>Bot holati:</b> {bot_status}\n\n"
         f"Quyidagi tugma orqali butun tizimni 1 bosishda to'xtatishingiz yoki yoqishingiz mumkin:"
     )
     await message.answer(panel_text, reply_markup=owner_panel_keyboard(active), parse_mode="HTML")
@@ -196,9 +198,10 @@ async def cmd_start(message: Message, bot: Bot):
     # Agar owner bo'lsa, boshqaruv panelini ko'rsatamiz
     if is_owner(message.from_user):
         active = await get_system_status(bot)
+        status_text = "🟢 FAOL (Ishlamoqda)" if active else "🔴 TO'XTATILGAN (Profilaktika)"
         panel_text = (
             f"🎛 <b>Boshqaruv Paneli</b>\n\n"
-            f"📊 <b>Tizim holati:</b> {'🟢 FAOL (Ishlamoqda)' if active else '🔴 TO\'XTATILGAN (Profilaktika)'}\n"
+            f"📊 <b>Tizim holati:</b> {status_text}\n"
             f"🌐 <b>Sayt:</b> {SITE_URL}\n\n"
             f"Boshqaruv tugmalari:"
         )

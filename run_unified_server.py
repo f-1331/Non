@@ -112,14 +112,18 @@ def create_web_app():
 
 
 async def start_telegram_bot():
-    """Telegram botni parallel polling rejimida ishga tushirish."""
+    """Telegram botni parallel rejimda tekshirish va ishga tushirish."""
     try:
         from telegram_bot import dp, Bot, BOT_TOKEN
         bot = Bot(token=BOT_TOKEN)
-        logger.info("🤖 Telegram Bot (Tandir Non) polling ishga tushirildi...")
-        await dp.start_polling(bot)
+        webhook_info = await bot.get_webhook_info()
+        if webhook_info.url:
+            logger.info(f"ℹ️ Telegram Bot Webhook faol: {webhook_info.url}. Serverless rejimida ishlamoqda.")
+        else:
+            logger.info("🤖 Telegram Bot (Tandir Non) polling ishga tushirildi...")
+            await dp.start_polling(bot)
     except Exception as e:
-        logger.error(f"Telegram botni ishga tushirishda xatolik: {e}")
+        logger.warning(f"Telegram bot boshqaruvi: {e}")
 
 
 async def main_unified():
