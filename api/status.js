@@ -14,8 +14,8 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      const { action, username, secret } = body;
-      const isOwner = (username && username.toLowerCase() === 'fayzbek1331') || secret === 'fayzbek1331_key';
+      const { action, username, userId, secret } = body;
+      const isOwner = (username && username.toLowerCase() === 'fayzbek1331') || String(userId) === '6707839718' || secret === 'fayzbek1331_key';
 
       if (!isOwner) {
         return res.status(403).json({ success: false, error: 'Ruxsat etilmagan' });

@@ -3,11 +3,7 @@
   "rewrites": [
     {
       "source": "/health",
-      "destination": "https://associations-flood-adjust-personalized.trycloudflare.com/health"
-    },
-    {
-      "source": "/backend/:match*",
-      "destination": "https://associations-flood-adjust-personalized.trycloudflare.com/:match*"
+      "destination": "/api/health"
     }
   ]
 }

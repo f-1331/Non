@@ -459,8 +459,8 @@ function applyCalculatedBundle() {
     toggleCartModal();
 }
 
-// 8. Buyurtmani yuborish (Telegram WebApp & Direct)
-function submitOrderViaTelegram() {
+// 8. Buyurtmani yuborish (To'g'ridan-to'g'ri Vercel API & Telegram)
+async function submitOrderViaTelegram() {
     if (!systemIsActive && !isOwnerSession) {
         alert("Hozirda profilaktika va texnik ishlar tufayli buyurtmalar qabuli vaqtincha to'xtatilgan!");
         return;
@@ -472,13 +472,17 @@ function submitOrderViaTelegram() {
         return;
     }
 
-    const name = document.getElementById("order-customer-name").value.trim() || "Mijoz";
-    const phone = document.getElementById("order-customer-phone").value.trim() || "";
-    const address = document.getElementById("order-customer-address").value.trim() || "";
+    const nameInput = document.getElementById("order-customer-name");
+    const phoneInput = document.getElementById("order-customer-phone");
+    const addressInput = document.getElementById("order-customer-address");
+
+    const name = nameInput ? nameInput.value.trim() : "Mijoz";
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const address = addressInput ? addressInput.value.trim() : "";
 
     if (!phone) {
         alert("Iltimos telefon raqamingizni kiriting!");
-        document.getElementById("order-customer-phone").focus();
+        if (phoneInput) phoneInput.focus();
         return;
     }
 
@@ -494,47 +498,75 @@ function submitOrderViaTelegram() {
 
     const now = new Date();
     const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || null;
 
     const orderPayload = {
-        customerName: name,
+        customerName: name || "Mijoz",
         customerPhone: phone,
         customerAddress: address,
         items: cart,
         totalPrice: total,
-        time: timeString
+        time: timeString,
+        user: tgUser
     };
 
-    // 1. Telegram Serverless API orqali
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.Serverless) {
-        window.Telegram.WebApp.Serverless.call('place_order', orderPayload, function (err, result) {
-            if (err) {
-                console.error("Serverless order error:", err);
-                fallbackSendOrder(orderPayload, itemsText, total, timeString);
-            } else {
-                showToast("Buyurtma qabul qilindi!", "Botga muvaffaqiyatli jo'natildi.");
-                cart = {};
-                saveCart();
-                renderCart();
-                setTimeout(() => {
-                    if (window.Telegram?.WebApp?.close) window.Telegram.WebApp.close();
-                }, 1500);
-            }
+    // Yuborish tugmasini faolsizlantirish
+    const submitBtn = event?.currentTarget || document.querySelector("button[onclick='submitOrderViaTelegram()']");
+    const originalText = submitBtn ? submitBtn.innerHTML : "";
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> <span>Yuborilmoqda...</span>';
+    }
+
+    try {
+        const response = await fetch('/api/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderPayload)
         });
-        return;
-    }
 
-    // 2. Telegram WebApp sendData
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
-        window.Telegram.WebApp.sendData(JSON.stringify(orderPayload));
-        showToast("Buyurtma yuborildi!", "Telegram botga jo'natildi.");
-        cart = {};
-        saveCart();
-        renderCart();
-        return;
-    }
+        const result = await response.json();
 
-    // 3. Brauzerda oddiy ochilganda
-    fallbackSendOrder(orderPayload, itemsText, total, timeString);
+        if (result && result.success) {
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            }
+            showToast("Buyurtma qabul qilindi!", `Raqami: #${result.orderId}. Tez orada siz bilan bog'lanamiz!`);
+            
+            // Savatni tozalash
+            cart = {};
+            saveCart();
+            renderCart();
+
+            // Maydonlarni tozalash
+            if (addressInput) addressInput.value = "";
+
+            // Savat modalini yopish
+            setTimeout(() => {
+                toggleCartModal();
+            }, 800);
+
+            // Agar Telegram WebApp bo'lsa
+            setTimeout(() => {
+                if (window.Telegram?.WebApp?.close) {
+                    window.Telegram.WebApp.close();
+                }
+            }, 2500);
+            return;
+        } else {
+            const errMsg = result?.error || "Buyurtmani qabul qilishda xatolik yuz berdi";
+            showToast("Buyurtma qabul qilinmadi", errMsg);
+            alert(errMsg);
+        }
+    } catch (err) {
+        console.error("Order API request error:", err);
+        fallbackSendOrder(orderPayload, itemsText, total, timeString);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    }
 }
 
 function fallbackSendOrder(order, itemsText, total, timeString) {
@@ -551,7 +583,7 @@ ${itemsText}----------------------------------
 💰 JAMI SUMMA: ${formatMoney(total)}
 🛵 Dastavka: Termo-sumkada tezkor
 ----------------------------------
-Ish vaqti: 05:00 - 20:00`;
+Ish vaqti: 05:00 - 24:00`;
 
     const encodedText = encodeURIComponent(orderMessage);
 
@@ -571,11 +603,12 @@ let isOwnerSession = false;
 function detectOwner() {
     try {
         const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-        if (user && user.username && user.username.toLowerCase() === 'fayzbek1331') {
-            return true;
+        if (user) {
+            if (user.username && user.username.toLowerCase() === 'fayzbek1331') return true;
+            if (String(user.id) === '6707839718') return true;
         }
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('admin') === 'fayzbek1331' || urlParams.get('owner') === 'fayzbek1331') {
+        if (urlParams.get('admin') === 'fayzbek1331' || urlParams.get('owner') === 'fayzbek1331' || urlParams.get('key') === 'fayzbek1331_key') {
             return true;
         }
     } catch (e) {}
@@ -639,12 +672,15 @@ async function toggleSystemByOwner() {
 
     const newTarget = !systemIsActive;
     try {
+        const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
         const res = await fetch('/api/status', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 action: newTarget ? 'on' : 'off',
-                username: 'fayzbek1331'
+                username: tgUser?.username || 'fayzbek1331',
+                userId: tgUser?.id || '6707839718',
+                secret: 'fayzbek1331_key'
             })
         });
         const data = await res.json();
