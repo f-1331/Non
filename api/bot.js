@@ -333,8 +333,10 @@ export default async function handler(req, res) {
       const user = msg.from;
       const chatId = msg.chat?.id;
 
+      const lowerText = text.toLowerCase().trim();
+
       // /start yoki /admin
-      if (text.startsWith('/start') || text.startsWith('/admin')) {
+      if (lowerText.startsWith('/start') || lowerText.startsWith('/admin')) {
         if (isOwner(user)) {
           const active = await getSystemStatus();
           await callTg('sendMessage', {
@@ -388,8 +390,8 @@ export default async function handler(req, res) {
         return res.status(200).json({ ok: true });
       }
 
-      // Menyu tugmasi
-      if (text === '🍞 Nonlarimiz (Menyu)') {
+      // Menyu tugmasi (yoki 'non', 'menyu' so'zlari)
+      if (text.includes('Nonlarimiz') || lowerText.includes('menyu') || lowerText.includes('non')) {
         const active = await getSystemStatus();
         if (!active && !isOwner(user)) {
           await callTg('sendMessage', {
@@ -415,7 +417,7 @@ export default async function handler(req, res) {
       }
 
       // Ish vaqti
-      if (text === '⏰ Ish vaqti') {
+      if (text.includes('Ish vaqti') || lowerText.includes('vaqt') || lowerText.includes('soat')) {
         await callTg('sendMessage', {
           chat_id: chatId,
           text: `⏰ <b>Tandir Non Ish Vaqti:</b>\n\n` +
@@ -429,7 +431,7 @@ export default async function handler(req, res) {
       }
 
       // Bog'lanish va dastavka
-      if (text === '📞 Bog\'lanish & Dastavka' || text === '🛵 Dastavka buyurtma berish') {
+      if (text.includes('Bog\'lanish') || text.includes('Dastavka') || lowerText.includes('aloqa') || lowerText.includes('telefon') || lowerText.includes('nomer')) {
         await callTg('sendMessage', {
           chat_id: chatId,
           text: `🛵 <b>Dastavka va Buyurtma Uchun Bog'lanish:</b>\n\n` +
@@ -459,6 +461,49 @@ export default async function handler(req, res) {
         });
         return res.status(200).json({ ok: true });
       }
+
+      // Har qanday boshqa xabar (Salom, Assalomu alaykum va h.k.) uchun umumiy javob
+      if (isOwner(user)) {
+        const active = await getSystemStatus();
+        await callTg('sendMessage', {
+          chat_id: chatId,
+          text: `⚙️ <b>TANDIR NON — BOSHQARUV</b>\n\n` +
+                `${active ? '🟢 <b>Tizim holati:</b> ISHLAMOQDA (Faol)' : '🔴 <b>Tizim holati:</b> TO\'XTATILGAN'}\n\n` +
+                `Tizimni boshqarish uchun quyidagi tugmalardan foydalaning:`,
+          parse_mode: 'HTML',
+          reply_markup: getOwnerKeyboard(active)
+        });
+      } else {
+        const active = await getSystemStatus();
+        if (!active) {
+          await callTg('sendMessage', {
+            chat_id: chatId,
+            text: `⚠️ Profilaktika ishlari tufayli buyurtmalar vaqtincha to'xtatilgan.`,
+            parse_mode: 'HTML'
+          });
+        } else {
+          await callTg('sendMessage', {
+            chat_id: chatId,
+            text: `Assalomu alaykum! 🥖\n\n` +
+                  `<b>Tandir Non</b> xizmatingizda! Issiq va mazali tandir nonlarini buyurtma qilish uchun quyidagi menyudan foydalaning:`,
+            parse_mode: 'HTML',
+            reply_markup: getClientReplyKeyboard()
+          });
+          await callTg('sendMessage', {
+            chat_id: chatId,
+            text: `🛒 <b>Nonlar menyusini ochish:</b>`,
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: '🍞 Non Menyusi (Saytni ochish)', web_app: { url: SITE_URL } }
+                ]
+              ]
+            }
+          });
+        }
+      }
+      return res.status(200).json({ ok: true });
     }
 
     return res.status(200).json({ ok: true });
