@@ -1,56 +1,33 @@
-import { db, api } from 'sdk';
-import { eq, desc } from 'sdk/db';
-import { settings, orders } from '../schema.js';
+import { api } from 'sdk';
 
 const OWNER_USERNAME = 'fayzbek1331';
+const OWNER_ID = 6707839718;
 
 export async function isOwner(from) {
   if (!from) return false;
-  if (from.username && from.username.toLowerCase() === OWNER_USERNAME) {
-    try {
-      await saveSetting('owner_user_id', String(from.id));
-    } catch (e) {}
+  if (from.id && (Number(from.id) === OWNER_ID || String(from.id) === String(OWNER_ID))) {
     return true;
   }
-  try {
-    const ownerIdSetting = await getSetting('owner_user_id');
-    if (ownerIdSetting && String(from.id) === String(ownerIdSetting)) {
-      return true;
-    }
-  } catch (e) {}
+  if (from.username && from.username.toLowerCase() === OWNER_USERNAME) {
+    return true;
+  }
   return false;
 }
 
-export async function getSetting(key) {
+export async function isSystemActive() {
   try {
-    const row = await db.select().from(settings).where(eq(settings.key, key)).get();
-    return row ? row.value : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-export async function saveSetting(key, value) {
-  try {
-    const existing = await db.select().from(settings).where(eq(settings.key, key)).get();
-    if (existing) {
-      await db.update(settings).set({ value: String(value) }).where(eq(settings.key, key)).run();
-    } else {
-      await db.insert(settings).values({ key, value: String(value) }).run();
+    const res = await api.getMyShortDescription();
+    const desc = res?.short_description || '';
+    if (desc.startsWith('[OFF]')) {
+      return false;
     }
   } catch (e) {
-    console.error('saveSetting error:', e);
+    // Xatolik bo'lsa sukut bo'yicha faol
   }
-}
-
-export async function isSystemActive() {
-  const val = await getSetting('system_active');
-  return val !== '0';
+  return true;
 }
 
 export async function setSystemActive(active) {
-  await saveSetting('system_active', active ? '1' : '0');
-
   try {
     if (active) {
       await api.setMyShortDescription({
@@ -74,16 +51,10 @@ export async function setSystemActive(active) {
       });
     }
   } catch (err) {
-    console.error('Sync bot error:', err);
+    console.error('setSystemActive xatolik:', err);
   }
 }
 
 export async function getSystemStats() {
-  let count = 0;
-  let recentOrders = [];
-  try {
-    count = await db.$count(orders);
-    recentOrders = await db.select().from(orders).orderBy(desc(orders.id)).limit(5).all();
-  } catch (e) {}
-  return { count, recentOrders };
+  return { count: 0, recentOrders: [] };
 }

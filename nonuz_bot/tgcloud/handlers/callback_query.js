@@ -10,7 +10,9 @@ export default async function (callbackQuery, ctx) {
   const owner = await isOwner(callbackQuery.from);
   const active = await isSystemActive();
 
-  await api.answerCallbackQuery({ callback_query_id: queryId });
+  try {
+    await api.answerCallbackQuery({ callback_query_id: queryId });
+  } catch (e) {}
   if (!chatId || !messageId) return;
 
   // 1. Owner Admin harakatlari

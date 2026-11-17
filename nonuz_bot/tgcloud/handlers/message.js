@@ -5,8 +5,10 @@ import { isOwner, isSystemActive, getSystemStats } from '../lib/system.js';
 export default async function (message, ctx) {
   const chatId = message.chat.id;
   const text = message.text ? message.text.trim() : '';
+  console.log('Incoming message:', { chatId, text, from: message.from });
   const owner = await isOwner(message.from);
   const active = await isSystemActive();
+  console.log('State:', { owner, active });
 
   // 1. Agar tizim to'xtatilgan bo'lsa va foydalanuvchi owner bo'lmasa
   if (!owner && !active) {
@@ -60,14 +62,20 @@ Kerakli amalni tanlang:`;
       ]
     ];
 
-    await api.sendMessage({
-      chat_id: chatId,
-      text: panelText,
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: adminButtons
-      }
-    });
+    console.log('Sending admin panel to:', chatId);
+    try {
+      const res = await api.sendMessage({
+        chat_id: chatId,
+        text: panelText,
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: adminButtons
+        }
+      });
+      console.log('Admin panel sent successfully, id:', res?.message_id);
+    } catch (sendErr) {
+      console.error('api.sendMessage error in admin panel:', sendErr.message, sendErr.description);
+    }
     return;
   }
 

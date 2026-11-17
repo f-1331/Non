@@ -33,12 +33,33 @@ export default async function (input, ctx) {
     console.error('DB insert error:', err);
   }
 
-  // Agar Telegram foydalanuvchisi bo'lsa, unga xabar yuborish
-  if (user?.id) {
-    const itemsList = Object.values(items || {})
-      .map(i => `• ${i.name} — ${i.qty} dona (${(i.price * i.qty).toLocaleString('uz-UZ')} so'm)`)
-      .join('\n');
+  const itemsList = Object.values(items || {})
+    .map(i => `• ${i.name} — ${i.qty} dona (${(i.price * i.qty).toLocaleString('uz-UZ')} so'm)`)
+    .join('\n');
 
+  // Do'kon egasiga yangi buyurtma xabarini yuborish
+  try {
+    await api.sendMessage({
+      chat_id: 6707839718,
+      text: 
+`🔔 <b>YANGI BUYURTMA KELDI!</b>
+
+👤 <b>Mijoz:</b> ${customerName || user?.first_name || 'Mijoz'}
+📞 <b>Telefon:</b> ${customerPhone}
+📍 <b>Manzil:</b> ${customerAddress || 'Kiritilmagan'}
+
+📋 <b>Buyurtma tarkibi:</b>
+${itemsList}
+
+💰 <b>Jami summa:</b> ${Number(totalPrice).toLocaleString('uz-UZ')} so'm`,
+      parse_mode: 'HTML'
+    });
+  } catch (err) {
+    console.error('Owner notification error:', err);
+  }
+
+  // Agar Telegram foydalanuvchisi bo'lsa, mijozga tasdiq xabari yuborish
+  if (user?.id) {
     try {
       await api.sendMessage({
         chat_id: user.id,
